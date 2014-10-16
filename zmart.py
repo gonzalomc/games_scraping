@@ -14,12 +14,12 @@ for x in range(1, 15):
 	
 	for game in games:
 		title = game.find("div", {"class": "caja_secundaria"})
-		nombre = title.find("a")
+		name = title.find("a")
 		game_data = game.find("ul", {"class": "precio_primero"})
-		precio = game_data.find("li", {"class": "precio"})
-		estado = game_data.find("li", {"class": "estado"})
-		print nombre.text.encode('UTF-8')
-		print precio.text
-		print estado.text
+		price = game_data.find("li", {"class": "precio"})
+		status = game_data.find("li", {"class": "estado"})
+		print name.text.encode('UTF-8')
+		print price.text
+		print status.text
 		print '======='
 
