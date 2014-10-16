@@ -1,9 +1,20 @@
 # -*- encoding: utf-8 -*-
+#!/usr/bin/python
+import MySQLdb
 import requests
 from bs4 import BeautifulSoup
 
 
+####### Mysql Conection #####
+db = MySQLdb.connect(host="localhost",
+	user="root",
+	passwd="root",
+	db="games")
+
 ####### PS3 Games : Only in stock ###########
+
+cur = db.cursor()
+cur.execute("DELETE FROM games");
 
 for x in range(1, 15):
 	url = "http://www.zmart.cl/scripts/prodList.asp?idcategory=187&curPage={0}&sortField=price%2C+idproduct&sinstock=0".format(str(x))
@@ -18,8 +29,18 @@ for x in range(1, 15):
 		game_data = game.find("ul", {"class": "precio_primero"})
 		price = game_data.find("li", {"class": "precio"})
 		status = game_data.find("li", {"class": "estado"})
-		print name.text.encode('UTF-8')
-		print price.text
-		print status.text
+
+		game_name = name.text.encode('UTF-8')
+		game_name = game_name.replace("'", "")
+		game_price =price.text
+
+
+		cur.execute("INSERT INTO games (name, price) VALUES ('{0}', '{1}')".format(game_name, game_price))
+		
+		print game_name
+		print game_price
 		print '======='
+
+db.commit()
+db.close()
 
