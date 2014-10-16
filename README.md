@@ -3,6 +3,8 @@ games_scraping
 
 ---------- doing scraping to videogames stores -----------
 
-Requirements: 
-	* requests
-	* BeautifulSoup4
+Requirements:
+==============
+
+* requests
+* BeautifulSoup4
