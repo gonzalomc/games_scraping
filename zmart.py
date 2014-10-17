@@ -9,12 +9,12 @@ from bs4 import BeautifulSoup
 db = MySQLdb.connect(host="localhost",
 	user="root",
 	passwd="root",
-	db="games")
+	db="scrp_games")
 
 ####### PS3 Games : Only in stock ###########
 
 cur = db.cursor()
-cur.execute("DELETE FROM games");
+cur.execute("DELETE FROM games_game WHERE store_id = 2");
 
 for x in range(1, 15):
 	url = "http://www.zmart.cl/scripts/prodList.asp?idcategory=187&curPage={0}&sortField=price%2C+idproduct&sinstock=0".format(str(x))
@@ -35,7 +35,7 @@ for x in range(1, 15):
 		game_price =price.text
 
 
-		cur.execute("INSERT INTO games (name, price) VALUES ('{0}', '{1}')".format(game_name, game_price))
+		cur.execute("INSERT INTO games_game (name, price, store_id) VALUES ('{0}', '{1}', 2)".format(game_name, game_price))
 		
 		print game_name
 		print game_price
