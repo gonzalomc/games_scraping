@@ -5,47 +5,33 @@ import requests
 from bs4 import BeautifulSoup
 
 
-####### Mysql Conection #####
+######################
+# Mysql 
+######################
 db = MySQLdb.connect(host="localhost",
 	user="root",
 	passwd="root",
 	db="scrp_games")
 
-####### PS3 Games : Only in stock ###########
-
 cur = db.cursor()
-cur.execute("DELETE FROM games_game WHERE store_id = 2");
 
-for x in range(1, 15):
-	url = "http://www.zmart.cl/scripts/prodList.asp?idcategory=187&curPage={0}&sortField=price%2C+idproduct&sinstock=0".format(str(x))
-	r = requests.get(url)
-	soup = BeautifulSoup(r.content)
-	#print soup.prettify().encode('UTF-8')
-	games = soup.findAll("div", {"class": "caja_minihome"})
+######################
+# 187 = Ps3 Games
+# 159 = Xbox 360 Games
+######################
+
+for category in (187, 159):
+	######################
+	# Console type
+	######################
+	if category == 187:
+		console = 1
+	else:
+		console = 2
 	
-	for game in games:
-		title = game.find("div", {"class": "caja_secundaria"})
-		name = title.find("a")
-		game_data = game.find("ul", {"class": "precio_primero"})
-		price = game_data.find("li", {"class": "precio"})
-		status = game_data.find("li", {"class": "estado"})
-
-		game_name = name.text.encode('UTF-8')
-		game_name = game_name.replace("'", "")
-		game_price =price.text
-
-
-		cur.execute("INSERT INTO games_game (name, price, store_id, console_id) VALUES ('{0}', '{1}', 2, 1)".format(game_name, game_price))
-		
-		print game_name
-		print game_price
-		print '======='
-
-#####################################################
-######### XBOX 360 Games : In Stock #############
-for x in range(1, 15):
-	try:
-		url = "http://www.zmart.cl/scripts/prodList.asp?idcategory=159&curPage={0}&sortField=price%2C+idproduct&sinstock=0".format(str(x))
+	for x in range(1, 15):
+		url = "http://www.zmart.cl/scripts/prodList.asp?idcategory={0}&curPage={1}&sortField=price%2C+idproduct&sinstock=0".format(str(category),
+			str(x))
 		r = requests.get(url)
 		soup = BeautifulSoup(r.content)
 		#print soup.prettify().encode('UTF-8')
@@ -63,17 +49,13 @@ for x in range(1, 15):
 			game_price =price.text
 
 
-			cur.execute("INSERT INTO games_game (name, price, store_id, console_id) VALUES ('{0}', '{1}', 2, 2)".format(game_name, game_price))
+			cur.execute("INSERT INTO games_game (name, price, store_id, console_id) VALUES ('{0}', '{1}', 2, {2})".format(game_name,
+				game_price, console))
 			
 			print game_name
 			print game_price
 			print '======='
-	except:
-		pass
 
 db.commit()
-
-#####################################################
-
 db.close()
 
