@@ -16,6 +16,7 @@ db = MySQLdb.connect(host="localhost",
 cur = db.cursor()
 
 ######################
+# Category Games Zmart
 # 187 = Ps3 Games
 # 159 = Xbox 360 Games
 ######################
@@ -23,6 +24,8 @@ cur = db.cursor()
 for category in (187, 159):
 	######################
 	# Console type
+	# 1 = PS3
+	# 2 = XBOX 360
 	######################
 	if category == 187:
 		console = 1
@@ -58,4 +61,3 @@ for category in (187, 159):
 
 db.commit()
 db.close()
-
