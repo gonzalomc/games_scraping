@@ -23,6 +23,6 @@ db.close()
 
 call(["python","zmart.py"])
 call(["python","todojuegos.py"])
-#call(["python","microplay.py"])
-#call(["python","sniper.py"])
+call(["python","microplay.py"])
+call(["python","sniper.py"])
 
