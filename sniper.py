@@ -10,33 +10,42 @@ db = MySQLdb.connect(host="localhost",
 	db="scrp_games")
 
 
-url = "http://sniper.cl/index.php?id=VerTablaProductos&Cat=4&SubCat=12"
-r = requests.get(url)
+for category in (4, 6):
+	if category == 4:
+		console = 1
+		subcat = 12
+	else:
+		console = 2
+		subcat = 18
 
-soup = BeautifulSoup(r.content)
-#print soup.prettify().encode('UTF-8')
+	url = "http://sniper.cl/index.php?id=VerTablaProductos&Cat={0}&SubCat={1}".format(category, subcat)
+	r = requests.get(url)
 
-content = soup.find("div", {"id": "cajacontenido"})
-table = content.find("table")
+	soup = BeautifulSoup(r.content)
+	#print soup.prettify().encode('UTF-8')
 
-cur = db.cursor()
-cur.execute("DELETE FROM games_game WHERE store_id = 5");
+	content = soup.find("div", {"id": "cajacontenido"})
+	table = content.find("table")
 
-try:
-	for game in table.findAll("tr"):
-		game_detail = game.findAll("td")
-		game_text = game_detail[0]
-		game_name = game_text.findAll("a")
-		for f in game_name:
-			game_name = f.text.encode('UTF-8')
-		game_price = game_detail[1].text
-		print '========='
-
-		cur.execute("INSERT INTO games_game (name, price, store_id) VALUES ('{0}', '{1}', 5)".format(game_name, game_price))
-
-	db.commit()
-except:
-	pass
+	cur = db.cursor()
 
 
+	try:
+		for game in table.findAll("tr"):
+			game_detail = game.findAll("td")
+			game_text = game_detail[0]
+			game_name = game_text.findAll("a")
+			for f in game_name:
+				game_name = f.text.encode('UTF-8').replace("'", "")
+			game_price = game_detail[1].text
+			print game_name
+			print game_price
+			print '========='
+			cur.execute("INSERT INTO games_game (name, price, store_id, console_id) VALUES ('{0}', '{1}', 5, {2})".format(game_name,
+				game_price, console))
+		
+	except:
+		pass
+
+db.commit()
 db.close()
