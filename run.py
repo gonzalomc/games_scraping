@@ -6,7 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 from subprocess import call
 
-
+# Run scripts
 
 ####### Mysql Conection #####
 db = MySQLdb.connect(host="localhost",
