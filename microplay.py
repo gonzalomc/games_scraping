@@ -12,11 +12,13 @@ db = MySQLdb.connect(host="localhost",
 
 cur = db.cursor()
 
-for category in ('ps3', 'xbox-360'):
+for category in ('ps3', 'xbox-360', 'ps4'):
 	if category == 'ps3':
 		console = 1
-	else:
+	elif category == 'xbox-360':
 		console = 2
+	else:
+		console = 3
 	try:
 		for x in range(1, 36):
 			try:
@@ -39,8 +41,8 @@ for category in ('ps3', 'xbox-360'):
 						game_name.encode('UTF-8').strip(), game_price.text, console))
 			except:
 				pass
-			db.commit()
+			
 	except:
 		pass
-
+db.commit()
 db.close()

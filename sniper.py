@@ -10,13 +10,16 @@ db = MySQLdb.connect(host="localhost",
 	db="scrp_games")
 
 
-for category in (4, 6):
+for category in (4, 6, 12):
 	if category == 4:
 		console = 1
 		subcat = 12
-	else:
+	elif category == 6:
 		console = 2
 		subcat = 18
+	else:
+		console = 3
+		subcat = 36
 
 	url = "http://sniper.cl/index.php?id=VerTablaProductos&Cat={0}&SubCat={1}".format(category, subcat)
 	r = requests.get(url)
