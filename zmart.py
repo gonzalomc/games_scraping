@@ -36,7 +36,7 @@ for category in (187, 159, 420):
 	else:
 		console = 3
 	
-	for x in range(1, 15):
+	for x in range(1, 20):
 		try:
 			url = "http://www.zmart.cl/scripts/prodList.asp?idcategory={0}&curPage={1}&sortField=price%2C+idproduct&sinstock=0".format(str(category),
 				str(x))
@@ -51,18 +51,20 @@ for category in (187, 159, 420):
 				game_data = game.find("ul", {"class": "precio_primero"})
 				price = game_data.find("li", {"class": "precio"})
 				status = game_data.find("li", {"class": "estado"})
-
+				
 				game_name = name.text.encode('UTF-8')
 				game_name = game_name.replace("'", "")
 				game_price =price.text
 
-
-				cur.execute("INSERT INTO games_game (name, price, store_id, console_id) VALUES ('{0}', '{1}', 2, {2})".format(game_name,
-					game_price, console))
+				game_link = "http://zmart.cl%s" % name['href']
 				
-				print game_name
-				print game_price
+				cur.execute("INSERT INTO games_game (name, price, store_id, console_id, link) VALUES ('{0}', '{1}', 2, {2}, '{3}')".format(game_name,
+					game_price, console, game_link))
+				
+				print game_name 
 				print '======='
+				
+				
 		except:
 			pass
 

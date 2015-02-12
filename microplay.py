@@ -34,11 +34,15 @@ for category in ('ps3', 'xbox-360', 'ps4'):
 					name_span = name_span.find("a")
 					game_name = name_span.text
 					game_price =  game.find("strong")
+					game_link = "http://www.microplay.cl%s" % name_span['href']
+					
+					
+					cur.execute("INSERT INTO games_game (name, price, store_id, console_id, link) VALUES ('{0}', '{1}', 4, {2}, '{3}')".format(
+						game_name.encode('UTF-8').strip(), game_price.text, console, game_link))
+					
+					
 					print game_name.encode('UTF-8').strip()
-					print game_price.text
-					print '####'
-					cur.execute("INSERT INTO games_game (name, price, store_id, console_id) VALUES ('{0}', '{1}', 4, {2})".format(
-						game_name.encode('UTF-8').strip(), game_price.text, console))
+					print '===='
 			except:
 				pass
 			

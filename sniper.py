@@ -38,15 +38,21 @@ for category in (4, 6, 12):
 			game_detail = game.findAll("td")
 			game_text = game_detail[0]
 			game_name = game_text.findAll("a")
+			
+			game_link = ""
 			for f in game_name:
+				game_link = "http://www.sniper.cl/%s" % f['href']
 				game_name = f.text.encode('UTF-8').replace("'", "")
+					
+			
 			game_price = game_detail[1].text
+			
+			
+			cur.execute("INSERT INTO games_game (name, price, store_id, console_id, link) VALUES ('{0}', '{1}', 5, {2}, '{3}')".format(game_name,
+				game_price, console, game_link))
+			
 			print game_name
-			print game_price
 			print '========='
-			cur.execute("INSERT INTO games_game (name, price, store_id, console_id) VALUES ('{0}', '{1}', 5, {2})".format(game_name,
-				game_price, console))
-		
 	except:
 		pass
 

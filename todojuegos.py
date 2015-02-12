@@ -46,14 +46,20 @@ for category in ('PS3', 'X360', 'PS4'):
 						try:
 							game_detail = game.find("table")
 							game_name = game_detail.find("a", {"target": "_self"})
+
+							game_link = game_name['href']
 							
 							price = game.find("p")
 							price_detail = price.text
 							
 							games_count += 1
+
+							#print price_detail.strip()
+							
+							cur.execute("INSERT INTO games_game (name, price, store_id, console_id, link) VALUES ('{0}','{1}', 3, {2}, '{3}')".format(game_name.text, price_detail.strip(), console, game_link))
+							
 							print game_name.text
-							print price_detail.strip()
-							cur.execute("INSERT INTO games_game (name, price, store_id, console_id) VALUES ('{0}','{1}', 3, {2})".format(game_name.text, price_detail.strip(), console))
+							print '===='
 
 						except:
 							pass
